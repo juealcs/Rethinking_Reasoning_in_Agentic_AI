@@ -1,4 +1,4 @@
-# Agentic AI Reasoning Benchmark
+# Rethinking Reasoning for Next-Generation Agentic AI
 
 This repository evaluates reasoning efficiency in Agentic AI using local vLLM servers and OpenAI GPT-4.1 as the evaluation judge.
 
