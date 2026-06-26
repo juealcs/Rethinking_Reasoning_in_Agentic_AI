@@ -107,7 +107,7 @@ CUDA_VISIBLE_DEVICES=1 VLLM_USE_V1=0 vllm serve meta-llama/Llama-3.1-8B-Instruct
 ## MATH-500
 
 ```bash
-python dataset_main.py \
+python main.py \
   --tool_model_choice qwen35-4b \
   --model_choice llama31-8b \
   --tool_base_url http://localhost:8000/v1 \
@@ -122,7 +122,7 @@ python dataset_main.py \
 ## GAIA
 
 ```bash
-python dataset_main.py \
+python main.py \
   --tool_model_choice qwen35-4b \
   --model_choice llama31-8b \
   --tool_base_url http://localhost:8000/v1 \
@@ -161,7 +161,7 @@ Example:
 
 ```bash
 python judge.py \
-  --input_file agentic_ai_benchmark/vanilla/tool_qwen35-4b/final_llama31-8b/HuggingFaceH4_MATH_500/vanilla_tool_qwen35-4b_final_llama31-8b_HuggingFaceH4_MATH_500_latest.json \
+  --input_file file_path\
   --judge_model gpt-4.1
 ```
 
@@ -206,8 +206,6 @@ agentic_ai_benchmark/
 | Model Choice | HuggingFace Model |
 |--------------|-------------------|
 | qwen35-4b | Qwen/Qwen3.5-4B |
-| qwen3-4b | Qwen/Qwen3-4B |
-| qwen3-8b | Qwen/Qwen3-8B |
 | llama31-8b | meta-llama/Llama-3.1-8B-Instruct |
 | deepseek-r1-7b | deepseek-ai/DeepSeek-R1-Distill-Qwen-7B |
 
@@ -249,10 +247,5 @@ The benchmark automatically records:
 If you use this repository in your research, please cite:
 
 ```bibtex
-@article{YOUR_CITATION,
-  title={Rethinking Reasoning for Next-Generation Agentic AI},
-  author={...},
-  journal={...},
-  year={2026}
-}
+will be updated soon
 ```
