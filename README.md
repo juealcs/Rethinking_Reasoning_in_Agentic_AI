@@ -15,7 +15,6 @@ Official repository for evaluating **reasoning efficiency in Agentic AI**. This 
 - Support for multiple open-source LLMs
 - GPT-4.1-based evaluation pipeline
 - Detailed latency, token, and reasoning statistics
-- Automatic experiment checkpointing and resume support
 - Support for MATH-500 and GAIA benchmark datasets
 
 ---
