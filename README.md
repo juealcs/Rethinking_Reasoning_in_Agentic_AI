@@ -133,7 +133,7 @@ export AZURE_OPENAI_DEPLOYMENT="gpt-4.1"
 
 ```bash
 python judge.py \
-  --input_file agentic_ai_benchmark/vanilla/tool_qwen35-4b/final_llama31-8b/HuggingFaceH4_MATH_500/vanilla_tool_qwen35-4b_final_llama31-8b_HuggingFaceH4_MATH_500_latest.json \
+  --input_file file_path \
   --judge_model gpt-4.1
 ```
 
