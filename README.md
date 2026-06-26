@@ -16,6 +16,7 @@ Official repository for evaluating **reasoning efficiency in Agentic AI**. This 
 - GPT-4.1-based evaluation pipeline
 - Detailed latency, token, and reasoning statistics
 - Automatic experiment checkpointing and resume support
+- Support for MATH-500 and GAIA benchmark datasets
 
 ---
 
@@ -24,7 +25,7 @@ Official repository for evaluating **reasoning efficiency in Agentic AI**. This 
 - Python 3.10+
 - CUDA-enabled GPU(s)
 - vLLM
-- Azure OpenAI (for evaluation)
+- Azure OpenAI or OpenAI-compatible judge endpoint
 - HuggingFace Datasets
 
 Install dependencies:
@@ -45,7 +46,6 @@ pip install vllm
 
 ```bash
 git clone https://github.com/juealcs/Reasoning_Agentic_AI.git
-
 cd Reasoning_Agentic_AI
 ```
 
@@ -71,6 +71,8 @@ CUDA_VISIBLE_DEVICES=0 VLLM_USE_V1=0 vllm serve Qwen/Qwen3.5-4B \
 ---
 
 # Start Final Model
+
+Run **one** final model server on **GPU 1**.
 
 ## DeepSeek-R1-Distill-Qwen-7B
 
@@ -102,10 +104,10 @@ CUDA_VISIBLE_DEVICES=1 VLLM_USE_V1=0 vllm serve meta-llama/Llama-3.1-8B-Instruct
 
 # Run Benchmark
 
-Example:
+## MATH-500
 
 ```bash
-python main.py \
+python dataset_main.py \
   --tool_model_choice qwen35-4b \
   --model_choice llama31-8b \
   --tool_base_url http://localhost:8000/v1 \
@@ -117,9 +119,27 @@ python main.py \
   --max_tokens 4096
 ```
 
+## GAIA
+
+```bash
+python dataset_main.py \
+  --tool_model_choice qwen35-4b \
+  --model_choice llama31-8b \
+  --tool_base_url http://localhost:8000/v1 \
+  --final_base_url http://localhost:8001/v1 \
+  --api_key EMPTY \
+  --dataset_id gaia-benchmark/GAIA \
+  --dataset_config 2023_all \
+  --split validation \
+  --prompt_field Question \
+  --answer_field "Final answer" \
+  --max_samples 165 \
+  --max_tokens 4096
+```
+
 ---
 
-# Configure Azure OpenAI
+# Configure Azure OpenAI Judge
 
 ```bash
 export AZURE_OPENAI_API_KEY="<YOUR_API_KEY>"
@@ -137,6 +157,14 @@ python judge.py \
   --judge_model gpt-4.1
 ```
 
+Example:
+
+```bash
+python judge.py \
+  --input_file agentic_ai_benchmark/vanilla/tool_qwen35-4b/final_llama31-8b/HuggingFaceH4_MATH_500/vanilla_tool_qwen35-4b_final_llama31-8b_HuggingFaceH4_MATH_500_latest.json \
+  --judge_model gpt-4.1
+```
+
 ---
 
 # Output Structure
@@ -147,6 +175,22 @@ agentic_ai_benchmark/
     └── tool_qwen35-4b/
         └── final_llama31-8b/
             └── HuggingFaceH4_MATH_500/
+                ├── *_latest.json
+                ├── *_summary.json
+                ├── *_memory.sqlite
+                ├── *_checkpoints.sqlite
+                ├── judge_result_*.json
+                └── judge_result_*_summary.json
+```
+
+For GAIA, the dataset folder will be similar to:
+
+```text
+agentic_ai_benchmark/
+└── vanilla/
+    └── tool_qwen35-4b/
+        └── final_llama31-8b/
+            └── gaia_benchmark_GAIA_2023_all/
                 ├── *_latest.json
                 ├── *_summary.json
                 ├── *_memory.sqlite
@@ -169,19 +213,12 @@ agentic_ai_benchmark/
 
 ---
 
-# Supported Dataset
+# Supported Datasets
 
-Current benchmark:
-
-- HuggingFaceH4/MATH-500
-
-Example:
-
-```bash
---dataset_id HuggingFaceH4/MATH-500 \
---split test \
---max_samples 500
-```
+| Dataset | Dataset ID | Config | Split | Prompt Field | Answer Field |
+|---------|------------|--------|-------|--------------|--------------|
+| MATH-500 | HuggingFaceH4/MATH-500 | None | test | auto | auto |
+| GAIA | gaia-benchmark/GAIA | 2023_all | validation | Question | Final answer |
 
 ---
 
