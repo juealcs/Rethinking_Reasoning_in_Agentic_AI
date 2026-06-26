@@ -1,35 +1,39 @@
 # Rethinking Reasoning for Next-Generation Agentic AI
 
-This repository evaluates reasoning efficiency in Agentic AI using local vLLM servers and OpenAI GPT-4.1 as the evaluation judge.
+Official repository for evaluating **reasoning efficiency in Agentic AI**. This framework benchmarks autonomous LLM agents by analyzing reasoning behavior, tool usage, latency, token consumption, and task performance across multiple foundation models.
+
+**GitHub:** https://github.com/juealcs/Reasoning_Agentic_AI
 
 ---
 
-# Environment
+## Features
+
+- Agentic AI benchmark built with LangGraph
+- Dynamic tool routing
+- Web search and long-term memory tools
+- Local inference using vLLM
+- Support for multiple open-source LLMs
+- GPT-4.1-based evaluation pipeline
+- Detailed latency, token, and reasoning statistics
+- Automatic experiment checkpointing and resume support
+
+---
+
+## Requirements
 
 - Python 3.10+
 - CUDA-enabled GPU(s)
 - vLLM
+- Azure OpenAI (for evaluation)
 - HuggingFace Datasets
-- Azure OpenAI (for judging)
 
----
-
-# Installation
-
-Clone the repository.
-
-```bash
-git clone <your_repository_url>
-cd <repository_name>
-```
-
-Install dependencies.
+Install dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Install vLLM.
+Install vLLM:
 
 ```bash
 pip install vllm
@@ -37,9 +41,19 @@ pip install vllm
 
 ---
 
+## Clone Repository
+
+```bash
+git clone https://github.com/juealcs/Reasoning_Agentic_AI.git
+
+cd Reasoning_Agentic_AI
+```
+
+---
+
 # Start Tool Model
 
-Run the tool model on GPU 0.
+Run the tool model on **GPU 0**.
 
 ```bash
 CUDA_VISIBLE_DEVICES=0 VLLM_USE_V1=0 vllm serve Qwen/Qwen3.5-4B \
@@ -58,7 +72,7 @@ CUDA_VISIBLE_DEVICES=0 VLLM_USE_V1=0 vllm serve Qwen/Qwen3.5-4B \
 
 # Start Final Model
 
-## DeepSeek-R1-7B
+## DeepSeek-R1-Distill-Qwen-7B
 
 ```bash
 CUDA_VISIBLE_DEVICES=1 VLLM_USE_V1=0 vllm serve deepseek-ai/DeepSeek-R1-Distill-Qwen-7B \
@@ -86,7 +100,9 @@ CUDA_VISIBLE_DEVICES=1 VLLM_USE_V1=0 vllm serve meta-llama/Llama-3.1-8B-Instruct
 
 ---
 
-# Run Agentic AI Benchmark
+# Run Benchmark
+
+Example:
 
 ```bash
 python main.py \
@@ -117,16 +133,15 @@ export AZURE_OPENAI_DEPLOYMENT="gpt-4.1"
 
 ```bash
 python judge.py \
-  --input_file \
-  agentic_ai_benchmark/vanilla/tool_qwen35-4b/final_llama31-8b/HuggingFaceH4_MATH_500/vanilla_tool_qwen35-4b_final_llama31-8b_HuggingFaceH4_MATH_500_latest.json \
+  --input_file agentic_ai_benchmark/vanilla/tool_qwen35-4b/final_llama31-8b/HuggingFaceH4_MATH_500/vanilla_tool_qwen35-4b_final_llama31-8b_HuggingFaceH4_MATH_500_latest.json \
   --judge_model gpt-4.1
 ```
 
 ---
 
-# Output Directory
+# Output Structure
 
-```
+```text
 agentic_ai_benchmark/
 └── vanilla/
     └── tool_qwen35-4b/
@@ -135,7 +150,9 @@ agentic_ai_benchmark/
                 ├── *_latest.json
                 ├── *_summary.json
                 ├── *_memory.sqlite
-                └── *_checkpoints.sqlite
+                ├── *_checkpoints.sqlite
+                ├── judge_result_*.json
+                └── judge_result_*_summary.json
 ```
 
 ---
@@ -152,24 +169,53 @@ agentic_ai_benchmark/
 
 ---
 
-# Dataset Example
+# Supported Dataset
+
+Current benchmark:
+
+- HuggingFaceH4/MATH-500
+
+Example:
 
 ```bash
---dataset_id HuggingFaceH4/MATH-500
---split test
+--dataset_id HuggingFaceH4/MATH-500 \
+--split test \
 --max_samples 500
 ```
 
 ---
 
+# Recorded Metrics
+
+The benchmark automatically records:
+
+- Accuracy
+- Input tokens
+- Output tokens
+- Total tokens
+- Estimated reasoning tokens
+- Token-limit failures
+- Tool calls
+- Tool execution time
+- Final inference time
+- End-to-end latency
+- Memory operations
+- Web search usage
+- Over-reasoning
+- Under-reasoning
+- Complete execution trace
+
+---
+
 # Citation
 
-If you use this repository, please cite our paper.
+If you use this repository in your research, please cite:
 
 ```bibtex
 @article{YOUR_CITATION,
-  title={Reasoning Efficiency in Agentic AI},
+  title={Rethinking Reasoning for Next-Generation Agentic AI},
   author={...},
+  journal={...},
   year={2026}
 }
 ```
